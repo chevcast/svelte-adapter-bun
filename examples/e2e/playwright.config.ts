@@ -2,7 +2,7 @@ import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
 
 // const command = process.env.SERVER_COMMAND;
-const command = "concurrently --kill-others \"bun run dev\" \"bun run dev-helper\"";
+const command = 'concurrently --kill-others "bun run dev" "bun run dev-helper"';
 
 const config: PlaywrightTestConfig = {
 	webServer: {

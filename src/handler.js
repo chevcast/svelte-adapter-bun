@@ -16,7 +16,7 @@ const server = new Server(manifest);
 await server.init({ env: (Bun || process).env });
 
 const xff_depth = parseInt(env("XFF_DEPTH", build_options.xff_depth ?? 1));
-const origin = env('ORIGIN', undefined);
+const origin = env("ORIGIN", undefined);
 
 const address_header = env("ADDRESS_HEADER", "").toLowerCase();
 const protocol_header = env("PROTOCOL_HEADER", "").toLowerCase();
@@ -148,7 +148,6 @@ function ssr(req) {
  */
 function get_origin(headers) {
   const protocol = (protocol_header && headers.get(protocol_header)) || "https";
-  host_header = host_header || "host";
-  const host = headers.get(host_header);
+  const host = headers.get(host_header || "host");
   return `${protocol}://${host}`;
 }

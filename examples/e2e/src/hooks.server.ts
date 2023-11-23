@@ -27,9 +27,9 @@ export const handleWebsocket: WebSocketHandler = {
 		// console.log('waiting to upgrade', url);
 		console.log('client upgrade', url.pathname);
 
-		if (url.pathname.startsWith('/ws')){
-            return upgrade(request);
-        }
-        return false;
+		if (url.pathname.startsWith('/ws')) {
+			return upgrade(request);
+		}
+		return false;
 	}
 };

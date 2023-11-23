@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gornostay25/svelte-adapter-bun.git"
+    "url": "git+https://github.com/catdadcode/svelte-adapter-bun.git"
   },
   "keywords": [
     "svelte",
@@ -31,17 +31,18 @@
     "sveltekit-adapter",
     "bun"
   ],
-  "author": "Volodymyr Palamar <@gornostay25>",
+  "author": "Alex Ford <@catdadcode>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gornostay25/svelte-adapter-bun/issues"
+    "url": "https://github.com/catdadcode/svelte-adapter-bun/issues"
   },
-  "homepage": "https://github.com/gornostay25/svelte-adapter-bun#readme",
+  "homepage": "https://github.com/catdadcode/svelte-adapter-bun#readme",
   "devDependencies": {
     "@sveltejs/kit": "^1.27.3",
     "bun-types": "^1.0.9",
     "mrmime": "^1.0.1",
     "prettier": "^3.0.3",
+    "prettier-plugin-svelte": "^3.1.2",
     "totalist": "^3.0.1"
   },
   "dependencies": {
