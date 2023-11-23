@@ -1,5 +1,5 @@
 {
-  "name": "svelte-adapter-bun",
+  "name": "@catdadcode/svelte-adapter-bun",
   "version": "0.5.1",
   "description": "Adapter for SvelteKit apps that generates a standalone Bun.js server.",
   "main": "index.js",
