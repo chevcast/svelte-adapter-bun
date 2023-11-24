@@ -9,4 +9,4 @@ await Bun.build({
   format: "esm",
   target: "bun",
 });
-// await Promise.all([fs.copyFile("src/.env.example", "files/.env.example")]);
+await Promise.all([fs.copyFile("src/.env.example", "files/.env.example")]);
