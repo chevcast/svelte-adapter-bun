@@ -19,7 +19,8 @@
   "scripts": {
     "build": "rm -fr files && bun run build.js",
     "lint": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepublish": "bun run build"
   },
   "repository": {
     "type": "git",
