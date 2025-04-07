@@ -20,7 +20,8 @@ const origin = env("ORIGIN", undefined);
 
 const address_header = env("ADDRESS_HEADER", "").toLowerCase();
 const protocol_header = env("PROTOCOL_HEADER", "").toLowerCase();
-const host_header = env("HOST_HEADER", "").toLowerCase();
+const host_header = env("HOST_HEADER", "host").toLowerCase();
+const port_header = env("PORT_HEADER", "").toLowerCase();
 
 /** @param {boolean} assets */
 export default function (assets) {
@@ -44,20 +45,20 @@ export default function (assets) {
     return handle(0);
   }
 
-  function defaultAcceptWebsocket(request, upgrade) {
-    return upgrade(request);
+  function defaultAcceptWebsocket(request, server) {
+    return server.upgrade(request);
   }
 
   try {
     const handleWebsocket = server.websocket();
     if (handleWebsocket) {
       return {
-        httpserver: (req, srv) => {
+        httpserver: async (req, srv) => {
           if (
             req.headers.get("connection")?.toLowerCase().includes("upgrade") &&
             req.headers.get("upgrade")?.toLowerCase() === "websocket"
           ) {
-            (handleWebsocket.upgrade ?? defaultAcceptWebsocket)(req, srv.upgrade.bind(srv));
+            await (handleWebsocket.upgrade ?? defaultAcceptWebsocket)(req, srv);
             return;
           }
           return handler(req, srv);
@@ -92,25 +93,37 @@ function serve(path, client = false) {
   );
 }
 
-/**@param {Request} req */
-function ssr(req) {
-  let request = req;
-  let url = req.url;
-  let path = url.slice(url.split("/", 3).join("/").length);
-  let base = origin || get_origin(req.headers);
-  request = new Request(base + path, req);
+/**@param {Request} request */
+function ssr(request) {
+  const baseOrigin = origin || get_origin(request.headers);
+  const url = request.url.slice(request.url.split("/", 3).join("/").length);
+  request = new Request(baseOrigin + url, {
+    method: request.method,
+    headers: request.headers,
+    body: request.body,
+    referrer: request.referrer,
+    referrerPolicy: request.referrerPolicy,
+    mode: request.mode,
+    credentials: request.credentials,
+    cache: request.cache,
+    redirect: request.redirect,
+    integrity: request.integrity,
+  });
 
-  if (address_header && !request.headers.has(address_header)) {
+  if (
+    address_header &&
+    request.headers.get(host_header) !== "127.0.0.1" &&
+    !request.headers.has(address_header)
+  ) {
     throw new Error(
-      `Address header was specified with ${
-        ENV_PREFIX + "ADDRESS_HEADER"
+      `Address header was specified with ${ENV_PREFIX + "ADDRESS_HEADER"
       }=${address_header} but is absent from request`,
     );
   }
 
   return server.respond(request, {
     getClientAddress() {
-      if (address_header) {
+      if (address_header && request.headers.get(host_header) !== "127.0.0.1") {
         const value = /** @type {string} */ (request.headers.get(address_header)) || "";
 
         if (address_header === "x-forwarded-for") {
@@ -122,8 +135,7 @@ function ssr(req) {
 
           if (xff_depth > addresses.length) {
             throw new Error(
-              `${ENV_PREFIX + "XFF_DEPTH"} is ${xff_depth}, but only found ${
-                addresses.length
+              `${ENV_PREFIX + "XFF_DEPTH"} is ${xff_depth}, but only found ${addresses.length
               } addresses`,
             );
           }
@@ -148,6 +160,11 @@ function ssr(req) {
  */
 function get_origin(headers) {
   const protocol = (protocol_header && headers.get(protocol_header)) || "https";
-  const host = headers.get(host_header || "host");
-  return `${protocol}://${host}`;
+  const host = headers.get(host_header);
+  const port = port_header && headers[port_header];
+  if (port) {
+    return `${protocol}://${host}:${port}`;
+  } else {
+    return `${protocol}://${host}`;
+  }
 }
