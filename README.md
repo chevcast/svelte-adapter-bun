@@ -1,14 +1,14 @@
-# @catdadcode/svelte-adapter-bun
+# @chevcast/svelte-adapter-bun
 
 [Adapter](https://kit.svelte.dev/docs/adapters) for SvelteKit apps that generates a standalone [Bun](https://github.com/oven-sh/bun) server.
 
 ## :zap: Usage
 
-Install with `bun add -d @catdadcode/svelte-adapter-bun`, then add the adapter to your `svelte.config.js`:
+Install with `bun add -d @chevcast/svelte-adapter-bun`, then add the adapter to your `svelte.config.js`:
 
 ```js
 // svelte.config.js
-import adapter from "@catdadcode/svelte-adapter-bun";
+import adapter from "@chevcast/svelte-adapter-bun";
 
 export default {
   kit: {
@@ -33,7 +33,7 @@ The adapter can be configured with various options:
 
 ```js
 // svelte.config.js
-import adapter from "@catdadcode/svelte-adapter-bun";
+import adapter from "@chevcast/svelte-adapter-bun";
 export default {
   kit: {
     adapter: adapter({
@@ -109,12 +109,12 @@ The default value of XFF_DEPTH if environment is not set. Default: `1`
 
 ## :spider_web: WebSocket Server
 
-https://bun.sh/docs/api/websockets
+<https://bun.sh/docs/api/websockets>
 
 ```js
 // hooks.server.js
 
-/** @type {import("@catdadcode/svelte-adapter-bun").WebSocketHandler} */
+/** @type {import("@chevcast/svelte-adapter-bun").WebSocketHandler} */
 export const handleWebsocket = {
   open(ws) {
     console.log("WebSocket opened");
